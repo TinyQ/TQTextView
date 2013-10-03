@@ -61,6 +61,13 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChanged:) name:UITextViewTextDidChangeNotification object:nil];
 }
 
+- (void)setText:(NSString *)text
+{
+    [super setText:text];
+    
+    [self textChanged:nil];
+}
+
 - (void)textChanged:(NSNotification *)notification
 {
     if([[self placeholder] length] == 0)
