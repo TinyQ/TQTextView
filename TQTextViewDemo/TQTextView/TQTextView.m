@@ -46,7 +46,7 @@
 {
     [super drawRect:rect];
 
-    if (self.text.length == 0 && ([[self placeholder] length] != 0))
+    if ([[self text] length] == 0 && ([[self placeholder] length] != 0))
     {
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextSetRGBFillColor (context, 0.5, 0.5, 0.5, 0.5);
