@@ -10,6 +10,8 @@
 
 @interface TQTextView : UITextView
 
-@property(nonatomic,copy)NSString *placeholder;          // default is nil. string is drawn 70% gray
+@property (nonatomic,copy)      NSString   *placeholder;            // default is nil.
+@property (nonatomic,strong)    UIColor    *placeholderColor;       // default is [UIColor grayColor];.
+@property (nonatomic)           CGPoint     placeholderPoint;       // default is (8,8)
 
 @end

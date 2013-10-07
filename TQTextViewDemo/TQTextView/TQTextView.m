@@ -39,6 +39,18 @@
 
 - (void)dealloc
 {
+    [self removeTextChangeObserver];
+}
+
+- (void)addTextChangeObserver
+{
+    self.placeholderColor = [UIColor grayColor];
+    self.placeholderPoint = CGPointMake(8, 8);
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChanged:) name:UITextViewTextDidChangeNotification object:nil];
+}
+
+- (void)removeTextChangeObserver
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -49,16 +61,11 @@
     if ([[self text] length] == 0 && ([[self placeholder] length] != 0))
     {
         CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSetRGBFillColor (context, 0.5, 0.5, 0.5, 0.5);
-        CGRect rect = CGRectMake(8, 8, self.bounds.size.width, 20);
-        
+        CGContextSetFillColorWithColor(context, self.placeholderColor.CGColor);
+        CGRect rect = CGRectMake(self.placeholderPoint.x, self.placeholderPoint.y, self.bounds.size.width, self.font.lineHeight);
+
         [self.placeholder drawInRect:rect withFont:self.font];
     }
-}
-
-- (void)addTextChangeObserver
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChanged:) name:UITextViewTextDidChangeNotification object:nil];
 }
 
 - (void)setText:(NSString *)text
@@ -68,12 +75,34 @@
     [self textChanged:nil];
 }
 
+- (void)setPlaceholder:(NSString *)placeholder
+{
+    _placeholder = placeholder;
+    
+    [self textChanged:nil];
+}
+
+- (void)setPlaceholderColor:(UIColor *)placeholderColor
+{
+    _placeholderColor = placeholderColor;
+    
+    [self textChanged:nil];
+}
+
+- (void)setPlaceholderPoint:(CGPoint)placeholderPoint
+{
+    _placeholderPoint = placeholderPoint;
+    
+    [self textChanged:nil];
+}
+
 - (void)textChanged:(NSNotification *)notification
 {
-    if([[self placeholder] length] == 0)
+    if(([[self placeholder] length] == 0) || ([[self text] length] > 1))
     {
         return;
     }
+    
     [self setNeedsDisplay];
 }
 
