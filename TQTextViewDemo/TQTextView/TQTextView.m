@@ -46,6 +46,7 @@
 {
     self.placeholderColor = [UIColor grayColor];
     self.placeholderPoint = CGPointMake(8, 8);
+    self.maxTextLength    = 0;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChanged:) name:UITextViewTextDidChangeNotification object:nil];
 }
 
@@ -57,16 +58,32 @@
 - (void)drawRect:(CGRect)rect
 {
     [super drawRect:rect];
-
-    if ([[self text] length] == 0 && ([[self placeholder] length] != 0))
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    //placeholder
+    if (([[self text] length] == 0) && ([[self placeholder] length] != 0))
     {
-        CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextSetFillColorWithColor(context, self.placeholderColor.CGColor);
         CGRect rect = CGRectMake(self.placeholderPoint.x, self.placeholderPoint.y, self.bounds.size.width, self.font.lineHeight);
-
         [self.placeholder drawInRect:rect withFont:self.font];
     }
+    
+    if (self.maxTextLength > 0)
+    {
+        UIFont *font = [UIFont systemFontOfSize:17];
+        NSInteger i = self.maxTextLength - [[self text] length];
+        NSString *lengthStr = [NSString stringWithFormat:@"%d",i];
+        CGSize size =  [lengthStr sizeWithFont:font];
+        CGRect rect = CGRectMake(self.bounds.size.width - size.width - 10 , self.bounds.size.height - font.lineHeight, size.width, font.lineHeight);
+        UIColor *color = i < 0 ? [UIColor redColor] : [UIColor grayColor];
+        CGContextSetFillColorWithColor(context, color.CGColor);
+        
+        [lengthStr drawInRect:rect withFont:font];
+    }
 }
+
+#pragma mark - Set Method
 
 - (void)setText:(NSString *)text
 {
@@ -96,14 +113,19 @@
     [self textChanged:nil];
 }
 
+- (void)setMaxTextLength:(NSInteger)maxTextLength
+{
+    _maxTextLength = maxTextLength;
+    
+    [self textChanged:nil];
+}
+
 - (void)textChanged:(NSNotification *)notification
 {
-    if(([[self placeholder] length] == 0) || ([[self text] length] > 1))
+    if (self.maxTextLength > 0 || ([[self placeholder] length] != 0))
     {
-        return;
+        [self setNeedsDisplay];
     }
-    
-    [self setNeedsDisplay];
 }
 
 @end
