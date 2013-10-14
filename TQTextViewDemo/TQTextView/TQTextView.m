@@ -65,8 +65,8 @@
     if (([[self text] length] == 0) && ([[self placeholder] length] != 0))
     {
         CGContextSetFillColorWithColor(context, self.placeholderColor.CGColor);
-        CGRect rect = CGRectMake(self.placeholderPoint.x, self.placeholderPoint.y, self.bounds.size.width, self.font.lineHeight);
-        [self.placeholder drawInRect:rect withFont:self.font];
+        CGRect rect = CGRectMake(self.placeholderPoint.x, self.placeholderPoint.y, self.bounds.size.width - self.placeholderPoint.x, self.bounds.size.height - self.placeholderPoint.y);
+        [self.placeholder drawInRect:rect withFont:self.font lineBreakMode:NSLineBreakByCharWrapping];
     }
     
     if (self.maxTextLength > 0)
