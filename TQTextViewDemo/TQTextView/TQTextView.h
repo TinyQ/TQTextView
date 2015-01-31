@@ -10,9 +10,9 @@
 
 @interface TQTextView : UITextView
 
-@property (nonatomic, copy)         NSString   *placeholder;            // default is nil.
-@property (nonatomic, strong)       UIColor    *placeholderColor;       // default is [UIColor grayColor];.
-@property (nonatomic)               CGPoint     placeholderPoint;       // default is (8,8)
-@property (nonatomic)               NSInteger   maxTextLength;          // default is 0.
+@property (nonatomic, copy  ) NSString  *placeholder;       // default is nil.
+@property (nonatomic, strong) UIColor   *placeholderColor;  // default is [UIColor grayColor];
+@property (nonatomic, strong) UIFont    *placeholderFont;   // default is TextView Font
+@property (nonatomic        ) CGPoint   placeholderPoint;   // default is (8,8)
 
 @end
